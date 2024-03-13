@@ -4,5 +4,5 @@ import vue from "@vitejs/plugin-vue";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: "/",
+  base: "https://osquimenacho28.github.io/Pseudorandom-Number-Generator/",
 });

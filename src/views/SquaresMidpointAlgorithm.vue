@@ -185,7 +185,7 @@ export default {
       // console.log(this.algorithmParameters.listOfLists);
     },
     cleanResultsContainer() {
-      window.location.reload();
+      location.reload();
     },
     searchDegenerateSequence() {
       var flag = false;

@@ -48,7 +48,7 @@
         </div>
         <div class="carousel-item">
           <img
-            src="../assets/images/third_algorithm.JPG"
+            src="../assets/images/third_algorithm.jpg"
             class="d-block w-100"
             alt="Algoritmo Lineal"
           />

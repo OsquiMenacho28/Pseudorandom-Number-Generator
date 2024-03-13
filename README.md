@@ -2,7 +2,7 @@
 
 Welcome to the ultimate platform for easy and efficient resolution of numerical algorithms, specializing in non-congruential algorithms such as Middle Squares and Middle Products, as well as Linear and Multiplicative congruential algorithms. This website has been designed with accessibility and simplicity in mind, providing users with the ability to input values and receive precise results instantly.
 
-## GitHub Pages: [Pseudorandom Number Generator](https://osquimenacho28.github.io/Pseudorandom-Number-Generator/)
+## Production: [Pseudorandom Number Generator](https://pseudorandom-number-generator.vercel.app/)
 
 ## Key Features
 

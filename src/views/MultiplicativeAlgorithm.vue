@@ -133,6 +133,11 @@
             </tbody>
           </table>
         </div>
+        <div class="mt-4 text-center">
+          <button type="button" class="btn btn-primary" @click="downloadData">
+            Descargar Tabla
+          </button>
+        </div>
       </div>
       <div class="mb-4">
         <h4>Solución:</h4>
@@ -146,6 +151,7 @@
 
 <script>
 import * as bootstrap from "bootstrap";
+import { exportArrayToExcel } from "../export_data/index.js";
 
 export default {
   data() {
@@ -269,7 +275,80 @@ export default {
         }
       } else return;
       return result;
-    }
+    },
+    downloadData() {
+      this.$swal.fire({
+        title: "Guardar archivo",
+        text: "Ingrese el nombre con el que desee guardar el archivo.",
+        input: "text",
+        inputAttributes: {
+          autocapitalize: "off"
+        },
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+        allowOutsideClick: false,
+        preConfirm: (fileName) => {
+          try {
+            if (this.algorithmParameters.listOfLists.length > 0) {
+              exportArrayToExcel(this.algorithmParameters.listOfLists, fileName);
+              return { success: true, fileName: fileName };
+            } else {
+              throw new Error(`El archivo ${fileName} no se pudo guardar.`);
+            }
+          } catch (error) {
+            throw new Error(error);
+          }
+        },
+        showClass: {
+          popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOutDown",
+        }
+      }).then((result) => {
+        if (result.isConfirmed && result.value.success) {
+          this.$swal.fire({
+            title: "Éxito!",
+            text: `El archivo ${result.value.fileName} se guardó correctamente.`,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 3500,
+            showClass: {
+              popup: "animate__animated animate__fadeInDown",
+            },
+            hideClass: {
+              popup: "animate__animated animate__fadeOutDown",
+            }
+          });
+        } else if (result.isConfirmed && !result.value.success) {
+          this.showSimpleAlert(
+            "Error",
+            `El archivo ${result.value.fileName} no se pudo guardar.`,
+            "error"
+          )
+        }
+      }).catch(error => {
+        console.error("Error:", error);
+        this.showSimpleAlert(
+          "Error",
+          "Hubo un problema al guardar el archivo.",
+          "error"
+        )
+      });
+    },
+    showSimpleAlert(alertTitle, alertText, alertIcon) {
+      this.$swal.fire({
+        title: alertTitle,
+        text: alertText,
+        icon: alertIcon,
+        showClass: {
+          popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOutDown",
+        }
+      });
+    },
   },
   mounted() {
     const tooltipTriggerList = document.querySelectorAll(

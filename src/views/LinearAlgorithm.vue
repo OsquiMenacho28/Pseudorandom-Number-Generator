@@ -66,7 +66,7 @@
       <div class="d-md-flex d-block justify-content-center gap-4 mt-md-5 mb-4">
         <div class="mb-3 mb-md-0 text-center">
           <p>Acciones:</p>
-          <button type="button" class="btn btn-success me-4" @click="generatePseudorandomNumbers" :disabled="resultsView || userInput.period === '' || userInput.x0Seed === '' || userInput.kValue === '' || userInput.additiveConstantValue === ''">
+          <button type="button" id="generatePRNButton" class="btn btn-success me-4" @click="generatePseudorandomNumbers" :disabled="resultsView || userInput.period === '' || userInput.x0Seed === '' || userInput.kValue === '' || userInput.additiveConstantValue === ''">
             Generar
           </button>
           <button type="button" class="btn btn-warning" @click="cleanResultsContainer" :disabled="!resultsView">Limpiar</button>
@@ -129,7 +129,7 @@
                 <th scope="col"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>r</mi><mi>i</mi></msub></math></th>
               </tr>
             </thead>
-            <tbody class="table-group-divider">
+            <tbody class="table-group-divider" id="resultsList">
               <tr v-for="resultList in algorithmParameters.listOfLists" :key="resultList">
                 <th>{{ resultList[0] }}</th>
                 <td>{{ resultList[1] }}</td>
@@ -190,15 +190,27 @@ export default {
       this.algorithmParameters.xList.push(parseInt(this.userInput.x0Seed));
       const period = parseInt(this.userInput.period);
       const kValue = parseInt(this.userInput.kValue);
-      const g = Math.log(period) / Math.log(2);
-      const m = Math.pow(2, g);
+      var g = (Math.log(period) / Math.log(2)).toFixed(4);
+      const gSplit = g.split(".");
+      if (gSplit[1].match(/^0+$/)) {
+        g = parseInt(g);
+      } else { g = g; }
+      var m = (Math.pow(2, g)).toFixed(4);
+      const mSplit = m.split(".");
+      if (mSplit[1].match(/^0+$/)) {
+        m = parseInt(m);
+      } else { m = m; }
       const multiplicativeConstant = 1 + (4 * kValue);
       const a = multiplicativeConstant;
       const c = parseInt(this.userInput.additiveConstantValue);
       var i = this.algorithmParameters.i;
       if (a > 0 && c > 0 && m > 0 && parseInt(this.userInput.x0Seed) > 0) {
         for (i; i <= period + 1; i++) {
-          const xi = (a * this.algorithmParameters.xList[i - 1] + c) % (m);
+          var xi = ((a * this.algorithmParameters.xList[i - 1] + c) % (m)).toFixed(4);
+          const xiSplit = xi.split(".");
+          if (xiSplit[1].match(/^0+$/)) {
+            xi = parseInt(xi);
+          } else { xi = xi; }
           this.algorithmParameters.xList.push(xi);
           const ri = xi / (m - 1);
           this.algorithmParameters.listOfLists.push([i, `(${a} * ${this.algorithmParameters.xList[i - 1]} + ${c}) MOD (${m})`, xi, ri]);
@@ -318,8 +330,16 @@ export default {
       var result = "";
       const period = parseInt(this.userInput.period);
       const kValue = parseInt(this.userInput.kValue);
-      const g = Math.log(period) / Math.log(2);
-      const m = Math.pow(2, g);
+      var g = (Math.log(period) / Math.log(2)).toFixed(4);
+      const gSplit = g.split(".");
+      if (gSplit[1].match(/^0+$/)) {
+        g = parseInt(g);
+      } else { g = g; }
+      var m = (Math.pow(2, g)).toFixed(4);
+      const mSplit = m.split(".");
+      if (mSplit[1].match(/^0+$/)) {
+        m = parseInt(m);
+      } else { m = m; }
       const multiplicativeConstant = 1 + (4 * kValue);
       const a = multiplicativeConstant;
       const c = parseInt(this.userInput.additiveConstantValue);
@@ -336,7 +356,11 @@ export default {
       `;
       if (a > 0 && c > 0 && m > 0 && parseInt(this.userInput.x0Seed) > 0) {
         for (i; i <= period + 1; i++) {
-          const xi = (a * this.algorithmParameters.xList[i - 1] + c) % (m);
+          var xi = ((a * this.algorithmParameters.xList[i - 1] + c) % (m)).toFixed(4);
+          const xiSplit = xi.split(".");
+          if (xiSplit[1].match(/^0+$/)) {
+            xi = parseInt(xi);
+          } else { xi = xi; }
           const ri = xi / (m - 1);
           result += `
           <hr class="border-3 text-primary w-50 mx-auto">

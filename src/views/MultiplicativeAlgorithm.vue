@@ -184,8 +184,16 @@ export default {
       this.algorithmParameters.xList.push(parseInt(this.userInput.x0Seed));
       const period = parseInt(this.userInput.period);
       const kValue = parseInt(this.userInput.kValue);
-      const g = (Math.log(period) / Math.log(2)) + 2;
-      const m = Math.pow(2, g);
+      var g = ((Math.log(period) / Math.log(2)) + 2).toFixed(4);
+      const gSplit = g.split(".");
+      if (gSplit[1].match(/^0+$/)) {
+        g = parseInt(g);
+      } else { g = g; }
+      var m = (Math.pow(2, g)).toFixed(4);
+      const mSplit = m.split(".");
+      if (mSplit[1].match(/^0+$/)) {
+        m = parseInt(m);
+      } else { m = m; }
       var multiplicativeConstant;
       if (this.userInput.aEquation === "3 + 8k") {
         multiplicativeConstant = 3 + (8 * kValue);
@@ -196,7 +204,11 @@ export default {
       var i = this.algorithmParameters.i;
       if (a > 0 && m > 0 && parseInt(this.userInput.x0Seed) > 0) {
         for (i; i <= period + 1; i++) {
-          const xi = (a * this.algorithmParameters.xList[i - 1]) % (m);
+          var xi = ((a * this.algorithmParameters.xList[i - 1]) % (m)).toFixed(4);
+          const xiSplit = xi.split(".");
+          if (xiSplit[1].match(/^0+$/)) {
+            xi = parseInt(xi);
+          } else { xi = xi; }
           this.algorithmParameters.xList.push(xi);
           const ri = xi / (m - 1);
           this.algorithmParameters.listOfLists.push([i, `(${a} * ${this.algorithmParameters.xList[i - 1]}) MOD (${m})`, xi, ri]);
@@ -242,8 +254,16 @@ export default {
       var result = "";
       const period = parseInt(this.userInput.period);
       const kValue = parseInt(this.userInput.kValue);
-      const g = (Math.log(period) / Math.log(2)) + 2;
-      const m = Math.pow(2, g);
+      var g = ((Math.log(period) / Math.log(2)) + 2).toFixed(4);
+      const gSplit = g.split(".");
+      if (gSplit[1].match(/^0+$/)) {
+        g = parseInt(g);
+      } else { g = g; }
+      var m = (Math.pow(2, g)).toFixed(4);
+      const mSplit = m.split(".");
+      if (mSplit[1].match(/^0+$/)) {
+        m = parseInt(m);
+      } else { m = m; }
       var multiplicativeConstant;
       if (this.userInput.aEquation === "3 + 8k") {
         multiplicativeConstant = 3 + (8 * kValue);
@@ -263,7 +283,11 @@ export default {
       `;
       if (a > 0 && m > 0 && parseInt(this.userInput.x0Seed) > 0) {
         for (i; i <= period + 1; i++) {
-          const xi = (a * this.algorithmParameters.xList[i - 1]) % (m);
+          var xi = ((a * this.algorithmParameters.xList[i - 1]) % (m)).toFixed(4);
+          const xiSplit = xi.split(".");
+          if (xiSplit[1].match(/^0+$/)) {
+            xi = parseInt(xi);
+          } else { xi = xi; }
           const ri = xi / (m - 1);
           result += `
           <hr class="border-3 text-primary w-50 mx-auto">

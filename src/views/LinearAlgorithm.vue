@@ -145,6 +145,12 @@
           </button>
         </div>
       </div>
+      <div>
+        <p
+          id="JSONList"
+          v-html="JSON.stringify(algorithmParameters.listOfLists)"
+        ></p>
+      </div>
       <div class="mb-4">
         <h4>Solución:</h4>
         <div class="solution-container border border-info border-3 rounded-5 text-center">
@@ -185,39 +191,39 @@ export default {
   methods: {
     generatePseudorandomNumbers() {
       if (this.userInput.period !== "" && this.userInput.x0Seed !== "" && this.userInput.kValue !== "" && this.userInput.additiveConstantValue !== "") {
+        this.algorithmParameters.xList.push(parseInt(this.userInput.x0Seed));
+        const period = parseInt(this.userInput.period);
+        const kValue = parseInt(this.userInput.kValue);
+        var g = (Math.log(period) / Math.log(2)).toFixed(4);
+        const gSplit = g.split(".");
+        if (gSplit[1].match(/^0+$/)) {
+          g = parseInt(g);
+        } else { g = g; }
+        var m = (Math.pow(2, g)).toFixed(4);
+        const mSplit = m.split(".");
+        if (mSplit[1].match(/^0+$/)) {
+          m = parseInt(m);
+        } else { m = m; }
+        const multiplicativeConstant = 1 + (4 * kValue);
+        const a = multiplicativeConstant;
+        const c = parseInt(this.userInput.additiveConstantValue);
+        var i = this.algorithmParameters.i;
+        if (a > 0 && c > 0 && m > 0 && parseInt(this.userInput.x0Seed) > 0) {
+          for (i; i <= period + 1; i++) {
+            var xi = ((a * this.algorithmParameters.xList[i - 1] + c) % (m)).toFixed(4);
+            const xiSplit = xi.split(".");
+            if (xiSplit[1].match(/^0+$/)) {
+              xi = parseInt(xi);
+            } else { xi = xi; }
+            this.algorithmParameters.xList.push(xi);
+            const ri = xi / (m - 1);
+            this.algorithmParameters.listOfLists.push([i, `(${a} * ${this.algorithmParameters.xList[i - 1]} + ${c}) MOD (${m})`, xi, ri]);
+          }
+        } else return;
+        this.alert.alertText = `El periodo es ${period}, k = ${kValue}, g = ${g}, m = 2^g = ${m}, a = 1 + 4k = ${a} (Constante Multiplicativa), c = ${c} (Constante Aditiva. Relativamente primo a m).`;
+        // console.log(this.algorithmParameters.listOfLists);
         this.resultsView = !this.resultsView;
       } else return;
-      this.algorithmParameters.xList.push(parseInt(this.userInput.x0Seed));
-      const period = parseInt(this.userInput.period);
-      const kValue = parseInt(this.userInput.kValue);
-      var g = (Math.log(period) / Math.log(2)).toFixed(4);
-      const gSplit = g.split(".");
-      if (gSplit[1].match(/^0+$/)) {
-        g = parseInt(g);
-      } else { g = g; }
-      var m = (Math.pow(2, g)).toFixed(4);
-      const mSplit = m.split(".");
-      if (mSplit[1].match(/^0+$/)) {
-        m = parseInt(m);
-      } else { m = m; }
-      const multiplicativeConstant = 1 + (4 * kValue);
-      const a = multiplicativeConstant;
-      const c = parseInt(this.userInput.additiveConstantValue);
-      var i = this.algorithmParameters.i;
-      if (a > 0 && c > 0 && m > 0 && parseInt(this.userInput.x0Seed) > 0) {
-        for (i; i <= period + 1; i++) {
-          var xi = ((a * this.algorithmParameters.xList[i - 1] + c) % (m)).toFixed(4);
-          const xiSplit = xi.split(".");
-          if (xiSplit[1].match(/^0+$/)) {
-            xi = parseInt(xi);
-          } else { xi = xi; }
-          this.algorithmParameters.xList.push(xi);
-          const ri = xi / (m - 1);
-          this.algorithmParameters.listOfLists.push([i, `(${a} * ${this.algorithmParameters.xList[i - 1]} + ${c}) MOD (${m})`, xi, ri]);
-        }
-      } else return;
-      this.alert.alertText = `El periodo es ${period}, k = ${kValue}, g = ${g}, m = 2^g = ${m}, a = 1 + 4k = ${a} (Constante Multiplicativa), c = ${c} (Constante Aditiva. Relativamente primo a m).`;
-      // console.log(this.algorithmParameters.listOfLists);
     },
     cleanResultsContainer() {
       location.reload();

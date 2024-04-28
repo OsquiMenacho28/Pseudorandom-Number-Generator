@@ -149,6 +149,7 @@
         <p
           id="JSONList"
           v-html="JSON.stringify(algorithmParameters.listOfLists)"
+          style="display: none;"
         ></p>
       </div>
       <div class="mb-4">
